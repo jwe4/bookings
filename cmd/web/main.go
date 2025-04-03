@@ -16,23 +16,25 @@ const portNumber = ":8080"
 var app config.AppConfig
 var session *scs.SessionManager
 
-// main is the main application function
+// main is the main function
 func main() {
-
-	// change to true in production
+	// change this to true when in production
 	app.InProduction = false
 
+	// set up the session
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true
 	session.Cookie.SameSite = http.SameSiteLaxMode
 	session.Cookie.Secure = app.InProduction
+
 	app.Session = session
 
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache")
 	}
+
 	app.TemplateCache = tc
 	app.UseCache = false
 
@@ -41,18 +43,15 @@ func main() {
 
 	render.NewTemplates(&app)
 
-	//http.HandleFunc("/", handlers.Repo.Home)
-	//http.HandleFunc("/about", handlers.Repo.About)
+	fmt.Println(fmt.Sprintf("Staring application on port %s", portNumber))
 
-	fmt.Println(fmt.Sprintf("Starting application on port %s", portNumber))
 	srv := &http.Server{
 		Addr:    portNumber,
 		Handler: routes(&app),
 	}
 
 	err = srv.ListenAndServe()
-	log.Fatal(err)
-
-	//_ = http.ListenAndServe(portNumber, nil) // to see how GoLand suggests fixing the warning.</p><p>Alternatively, if available, click the lightbulb to view possible fixes.</p>
-
+	if err != nil {
+		log.Fatal(err)
+	}
 }
