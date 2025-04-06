@@ -3,9 +3,9 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/jwe4/bookings/internal/config"
+	"github.com/jwe4/bookings/internal/render"
 	"github.com/jwe4/bookings/models"
-	"github.com/jwe4/bookings/pkg/config"
-	"github.com/jwe4/bookings/pkg/render"
 	"log"
 	"net/http"
 )
@@ -97,8 +97,6 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-
-	log.Println(string(out))
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)

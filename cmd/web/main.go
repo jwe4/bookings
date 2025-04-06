@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/alexedwards/scs/v2"
-	"github.com/jwe4/bookings/pkg/config"
-	"github.com/jwe4/bookings/pkg/handlers"
-	"github.com/jwe4/bookings/pkg/render"
+	"github.com/jwe4/bookings/internal/config"
+	"github.com/jwe4/bookings/internal/handlers"
+	"github.com/jwe4/bookings/internal/render"
 	"log"
 	"net/http"
 	"time"
