@@ -8,8 +8,8 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/justinas/nosurf"
 	"github.com/jwe4/bookings/internal/config"
+	"github.com/jwe4/bookings/internal/models"
 	"github.com/jwe4/bookings/internal/render"
-	"github.com/jwe4/bookings/models"
 	"html/template"
 	"log"
 	"net/http"
@@ -23,8 +23,9 @@ var pathToTemplates = "./../../templates"
 var functions = template.FuncMap{}
 
 func getRoutes() http.Handler {
-
+	// what am I going to put in the session
 	gob.Register(models.Reservation{})
+
 	// change this to true when in production
 	app.InProduction = false
 
@@ -47,12 +48,13 @@ func getRoutes() http.Handler {
 
 	repo := NewRepo(&app)
 	NewHandlers(repo)
+
 	render.NewTemplates(&app)
 
 	mux := chi.NewRouter()
 
 	mux.Use(middleware.Recoverer)
-	mux.Use(NoSurf)
+	//mux.Use(NoSurf)
 	mux.Use(SessionLoad)
 
 	mux.Get("/", Repo.Home)
@@ -62,7 +64,7 @@ func getRoutes() http.Handler {
 
 	mux.Get("/search-availability", Repo.Availability)
 	mux.Post("/search-availability", Repo.PostAvailability)
-	mux.Get("/search-availability-json", Repo.AvailabilityJSON)
+	mux.Post("/search-availability-json", Repo.AvailabilityJSON)
 
 	mux.Get("/contact", Repo.Contact)
 
@@ -74,7 +76,6 @@ func getRoutes() http.Handler {
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
 	return mux
-
 }
 
 // NoSurf is the csrf protection middleware
@@ -95,13 +96,12 @@ func SessionLoad(next http.Handler) http.Handler {
 	return session.LoadAndSave(next)
 }
 
-// CreateTemplateCache creates a template cache as a map
+// CreateTestTemplateCache creates a template cache as a map
 func CreateTestTemplateCache() (map[string]*template.Template, error) {
 
 	myCache := map[string]*template.Template{}
 
 	pages, err := filepath.Glob(fmt.Sprintf("%s/*.page.tmpl", pathToTemplates))
-
 	if err != nil {
 		return myCache, err
 	}

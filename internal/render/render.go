@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/justinas/nosurf"
 	"github.com/jwe4/bookings/internal/config"
-	"github.com/jwe4/bookings/models"
+	"github.com/jwe4/bookings/internal/models"
 	"html/template"
 	"log"
 	"net/http"
