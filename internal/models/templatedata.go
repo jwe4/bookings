@@ -1,6 +1,8 @@
 package models
 
-import "github.com/jwe4/bookings/internal/config/forms"
+import (
+	"github.com/jwe4/bookings/internal/forms"
+)
 
 type TemplateData struct {
 	StringMap map[string]string

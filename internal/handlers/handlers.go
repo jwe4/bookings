@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/jwe4/bookings/internal/config"
-	"github.com/jwe4/bookings/internal/config/forms"
+	"github.com/jwe4/bookings/internal/forms"
 	models2 "github.com/jwe4/bookings/internal/models"
 	"github.com/jwe4/bookings/internal/render"
 	"log"
@@ -84,7 +84,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	form := forms.New(r.PostForm)
 
 	form.Required("first_name", "last_name", "email")
-	form.MinLength("first_name", 3, r)
+	form.MinLength("first_name", 3)
 	form.IsEmail("email")
 
 	if !form.Valid() {
