@@ -6,10 +6,12 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/jwe4/bookings/internal/config"
 	"github.com/jwe4/bookings/internal/handlers"
+	"github.com/jwe4/bookings/internal/helpers"
 	"github.com/jwe4/bookings/internal/models"
 	"github.com/jwe4/bookings/internal/render"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -17,6 +19,8 @@ const portNumber = ":8080"
 
 var app config.AppConfig
 var session *scs.SessionManager
+var infoLog *log.Logger
+var errorLog *log.Logger
 
 // main is the main function
 func main() {
@@ -46,6 +50,12 @@ func run() error {
 	// change this to true when in production
 	app.InProduction = false
 
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog = log.New(os.Stdout, "ERRORt", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
+
 	// set up the session
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
@@ -68,5 +78,6 @@ func run() error {
 	handlers.NewHandlers(repo)
 
 	render.NewTemplates(&app)
+	helpers.NewHelpers(&app)
 	return nil
 }
