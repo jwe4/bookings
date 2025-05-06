@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/jwe4/bookings/internal/config"
+	"github.com/jwe4/bookings/internal/driver"
 	"github.com/jwe4/bookings/internal/forms"
 	"github.com/jwe4/bookings/internal/helpers"
 	models2 "github.com/jwe4/bookings/internal/models"
 	"github.com/jwe4/bookings/internal/render"
+	"github.com/jwe4/bookings/internal/repository"
+	"github.com/jwe4/bookings/internal/repository/dbrepo"
 	"net/http"
 )
 
@@ -17,12 +20,14 @@ var Repo *Repository
 // Repository is the repository type
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 // NewRepo creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, a),
 	}
 }
 
@@ -33,6 +38,7 @@ func NewHandlers(r *Repository) {
 
 // Home is the handler for the home page
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
+	//m.DB.AllUsers()
 	render.RenderTemplate(w, r, "home.page.tmpl", &models2.TemplateData{})
 }
 
