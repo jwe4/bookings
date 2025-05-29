@@ -24,7 +24,7 @@ func TestMain(m *testing.M) {
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	testApp.InfoLog = infoLog
 
-	errorLog := log.New(os.Stdout, "ERRORt", log.Ldate|log.Ltime|log.Lshortfile)
+	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 	testApp.ErrorLog = errorLog
 
 	// set up the session
