@@ -30,6 +30,7 @@ func TestMain(m *testing.M) {
 
 	// change this to true when in production
 	app.InProduction = false
+
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	app.InfoLog = infoLog
 
@@ -57,6 +58,7 @@ func TestMain(m *testing.M) {
 	NewHandlers(repo)
 
 	render.NewRenderer(&app)
+
 	os.Exit(m.Run())
 }
 
@@ -88,7 +90,7 @@ func getRoutes() http.Handler {
 	return mux
 }
 
-// NoSurf is the csrf protection middleware
+// NoSurf adds CSRF protection to all POST requests
 func NoSurf(next http.Handler) http.Handler {
 	csrfHandler := nosurf.New(next)
 
@@ -101,7 +103,7 @@ func NoSurf(next http.Handler) http.Handler {
 	return csrfHandler
 }
 
-// SessionLoad loads and saves session data for current request
+// SessionLoad loads and saves the session on every request
 func SessionLoad(next http.Handler) http.Handler {
 	return session.LoadAndSave(next)
 }
